@@ -1,0 +1,99 @@
+{% extends 'layout.html' %}
+
+{% block title %}Books - Library Management System{% endblock %}
+
+{% block page_header %}Books{% endblock %}
+{% block page_subheader %}
+    <p class="text-muted">Manage your library's book collection</p>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Search Form Column (Full Width) -->
+    <div class="col-12 mb-4">
+        <form id="searchForm" action="{{ url_for('books_index') }}" method="GET" class="d-flex flex-column gap-3">
+      
+          <!-- Search Input (Column) -->
+          <div class="input-group">
+            <span class="input-group-text bg-dark text-white border-dark rounded">
+              <i class="fas fa-search"></i>
+            </span>
+            {{ form.query(class="form-control rounded border-dark dark-input", placeholder="Search books...") }}
+          </div>
+      
+          <!-- Category, Status, Add Book (Row) -->
+          <div class="d-flex flex-wrap gap-3 rounded-4">
+            <div class="form-floating flex-fill">
+              {{ form.category(class="form-select rounded-3 border-dark dark-input", id="category") }}
+              <!-- <label for="category"></label> -->
+            </div>
+            <div class="form-floating flex-fill rounded-4">
+              {{ form.status(class="form-select rounded-3 border-dark dark-input", id="status") }}
+              <!-- <label for="status"></label> -->
+            </div>
+            <div class="flex-fill d-flex align-items-end">
+              <a href="{{ url_for('books_add') }}" class="btn btn-primary h-100 w-100 rounded-4">
+                <i class="fas fa-plus me-1 mt-3"></i> Add New Book
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+        
+    <!-- Book Cards Display Column -->
+    <div class="col-md-12">
+        <div class="row">
+            {% if books %}
+                {% for book in books %}
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card book-card h-100 card book-card h-100 rounded-4">
+                            <div class="card-body">
+                                <span class="badge float-end status-badge {{ 'badge-available' if book.status == 'Available' else 'badge-borrowed' }} rounded-4">
+                                    {{ book.status }}
+                                </span>
+                                <h5 class="card-title mb-1">{{ book.title }}</h5>
+                                <p class="card-text text-muted small mb-2">by {{ book.author }}</p>
+                                <div class="mb-2">
+                                    <span class="badge bg-secondary">{{ book.category }}</span>
+                                    <span class="badge bg-secondary">{{ book.published_year }}</span>
+                                </div>
+                                <p class="card-text small text-truncate">{{ book.description }}</p>
+                            </div>
+                            <div class="card-footer rounded-bottom-3">
+                                <div class="btn-group w-100" role="group">
+                                    <a href="{{ url_for('books_view', id=book.id) }}" class="btn btn-sm btn-outline-primary rounded-4">
+                                        <i class="fas fa-eye mt-2"></i>
+                                    </a>
+                                    <a href="{{ url_for('books_edit', id=book.id) }}" class="btn btn-sm btn-outline-secondary rounded-4">
+                                        <i class="fas fa-edit mt-2"></i>
+                                    </a>
+                                    <form method="POST" action="{{ url_for('books_delete', id=book.id) }}" class="d-inline ">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger delete-confirm rounded-pill">
+                                            <i class="fas fa-trash "></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body text-center py-5">
+                            <i class="fas fa-book-open fs-1 text-muted mb-3"></i>
+                            <h5>No Books Found</h5>
+                            <p class="text-muted">There are no books matching your search criteria.</p>
+                            <div class="mt-3">
+                                <a href="{{ url_for('books_index') }}" class="btn btn-outline-secondary me-2">Clear Filters</a>
+                                <a href="{{ url_for('books_add') }}" class="btn btn-primary">Add New Book</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

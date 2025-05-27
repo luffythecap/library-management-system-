@@ -1,0 +1,146 @@
+{% extends 'layout.html' %}
+
+{% block title %}Member Details - Library Management System{% endblock %}
+
+{% block page_header %}Member Details{% endblock %}
+{% block page_subheader %}
+    <p class="text-muted">View complete information about this member</p>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">{{ member.name }}</h3>
+                <p class="text-muted mb-3">Member #{{ member.id }}</p>
+                
+                <hr>
+                
+                <dl class="row">
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8">{{ member.email }}</dd>
+                    
+                    <dt class="col-sm-4">Phone</dt>
+                    <dd class="col-sm-8">{{ member.phone }}</dd>
+                    
+                    <dt class="col-sm-4">Join Date</dt>
+                    <dd class="col-sm-8">{{ member.join_date }}</dd>
+                    
+                    <dt class="col-sm-4">Status</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge {{ 'bg-success' if member.membership_status == 'Active' else 'bg-secondary' }}">
+                            {{ member.membership_status }}
+                        </span>
+                    </dd>
+                </dl>
+                
+                <div class="d-grid gap-2 mt-4">
+                    <a href="{{ url_for('members_edit', id=member.id) }}" class="btn btn-primary">
+                        <i class="fas fa-edit me-1"></i> Edit Member
+                    </a>
+                    <form method="POST" action="{{ url_for('members_delete', id=member.id) }}">
+                        <button type="submit" class="btn btn-outline-danger w-100 delete-confirm">
+                            <i class="fas fa-trash me-1"></i> Delete Member
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Member Statistics Card -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">Activity Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <h3>{{ total_borrowed }}</h3>
+                        <p class="text-muted small">Total Books</p>
+                    </div>
+                    <div class="col-4">
+                        <h3>{{ currently_borrowed }}</h3>
+                        <p class="text-muted small">Current</p>
+                    </div>
+                    <div class="col-4">
+                        <h3>{{ overdue_books }}</h3>
+                        <p class="text-muted small">Overdue</p>
+                    </div>
+                </div>
+                
+                <div class="d-grid mt-3">
+                    <a href="{{ url_for('borrow_add') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-book me-1"></i> Borrow New Book
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Borrowing History</h5>
+            </div>
+            <div class="card-body">
+                {% if borrowings %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Book</th>
+                                <th>Borrowed On</th>
+                                <th>Due Date</th>
+                                <th>Returned On</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for borrow in borrowings %}
+                            <tr>
+                                <td>{{ borrow.book_title }}</td>
+                                <td>{{ borrow.borrow_date }}</td>
+                                <td>{{ borrow.due_date }}</td>
+                                <td>{{ borrow.return_date or '-' }}</td>
+                                <td>
+                                    <span class="badge status-badge 
+                                        {% if borrow.status == 'Returned' %}
+                                            badge-returned
+                                        {% elif borrow.status == 'Borrowed' and borrow.due_date < now_date %}
+                                            badge-overdue
+                                        {% else %}
+                                            badge-borrowed
+                                        {% endif %}">
+                                        {{ borrow.status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if borrow.status == 'Borrowed' %}
+                                    <a href="{{ url_for('borrow_return', id=borrow.id) }}" class="btn btn-sm btn-outline-success">
+                                        <i class="fas fa-check-circle"></i> Return
+                                    </a>
+                                    {% else %}
+                                    <button class="btn btn-sm btn-outline-secondary" disabled>
+                                        <i class="fas fa-check-circle"></i> Returned
+                                    </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-book fs-1 text-muted mb-3"></i>
+                    <p>This member hasn't borrowed any books yet.</p>
+                    <a href="{{ url_for('borrow_add') }}" class="btn btn-primary">Record New Borrowing</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

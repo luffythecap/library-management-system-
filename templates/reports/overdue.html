@@ -1,0 +1,69 @@
+{% extends 'layout.html' %}
+
+{% block title %}Overdue Books Report - Library Management System{% endblock %}
+
+{% block page_header %}Overdue Books Report{% endblock %}
+{% block page_subheader %}
+    <p class="text-muted">Books that are currently past their due date</p>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-danger text-white">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i> Overdue Books</h5>
+            <span class="badge bg-light text-danger">{{ borrowings|length }} Overdue</span>
+        </div>
+    </div>
+    <div class="card-body">
+        {% if borrowings %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Member</th>
+                        <th>Contact</th>
+                        <th>Borrowed Date</th>
+                        <th>Due Date</th>
+                        <th>Days Overdue</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for borrow in borrowings %}
+                    <tr>
+                        <td>
+                            <strong>{{ borrow.book_title }}</strong><br>
+                            <small class="text-muted">by {{ borrow.book_author }}</small>
+                        </td>
+                        <td>{{ borrow.member_name }}</td>
+                        <td>
+                            <small><i class="fas fa-envelope me-1"></i> {{ borrow.member_email }}</small><br>
+                            <small><i class="fas fa-phone me-1"></i> {{ borrow.member_phone }}</small>
+                        </td>
+                        <td>{{ borrow.borrow_date }}</td>
+                        <td>{{ borrow.due_date }}</td>
+                        <td>
+                            <span class="badge bg-danger">{{ borrow.days_overdue }} days</span>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('borrow_return', id=borrow.id) }}" class="btn btn-sm btn-outline-success">
+                                <i class="fas fa-check-circle me-1"></i> Return
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-check-circle fs-1 text-success mb-3"></i>
+            <h5>No Overdue Books</h5>
+            <p class="text-muted">All borrowed books are within their due dates.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

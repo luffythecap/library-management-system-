@@ -1,0 +1,101 @@
+{% extends 'layout.html' %}
+
+{% block title %}Borrowings - Library Management System{% endblock %}
+
+{% block page_header %}Borrowings{% endblock %}
+
+{% block page_subheader %}
+  <p class="text-muted">Manage book borrowings and returns</p>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+  <div class="col-md-6">
+    <form action="{{ url_for('borrow_index') }}" method="GET" class="row g-2">
+      <div class="col-12">
+        <div class="input-group shadow-sm">
+          <span class="input-group-text bg-dark border-secondary text-white">
+            <i class="fas fa-search"></i>
+          </span>
+          <input type="text" name="query" class="form-control bg-dark border-secondary text-white" 
+                 placeholder="Search borrowings..." value="{{ request.args.get('query', '') }}">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="col-md-6 text-md-end mt-3 mt-md-0">
+    <a href="{{ url_for('borrow_add') }}" class="btn btn-success d-inline-flex align-items-center gap-2 rounded-pill shadow-sm">
+      <i class="fas fa-plus"></i> 
+      <span class="d-none d-md-inline">New Borrowing</span>
+    </a>
+  </div>
+</div>
+
+<div class="card bg-dark text-light border-0 shadow-lg rounded-4">
+  <div class="card-body">
+    {% if borrowings %}
+      <div class="table-responsive rounded-4">
+        <table class="table table-dark table-hover align-middle mb-0 ">
+          <thead class="table-light text-dark">
+            <tr>
+              <th scope="col">#ID</th>
+              <th scope="col">📚 Book</th>
+              <th scope="col">👤 Member</th>
+              <th scope="col">📅 Borrow Date</th>
+              <th scope="col">⏳ Due Date</th>
+              <th scope="col">✅ Return Date</th>
+              <th scope="col">📌 Status</th>
+              <th scope="col">⚙️ Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for borrow in borrowings %}
+            <tr>
+              <td>{{ borrow.id }}</td>
+              <td>{{ borrow.book_title }}</td>
+              <td>{{ borrow.member_name }}</td>
+              <td>{{ borrow.borrow_date }}</td>
+              <td>{{ borrow.due_date }}</td>
+              <td>{{ borrow.return_date or '-' }}</td>
+              <td>
+                {% if borrow.status == 'Returned' %}
+                  <span class="badge bg-success px-3 py-2 rounded-pill">Returned</span>
+                {% elif borrow.status == 'Borrowed' and borrow.due_date_obj < now_date %}
+                  <span class="badge bg-danger px-3 py-2 rounded-pill">Overdue</span>
+                {% else %}
+                  <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">Borrowed</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if borrow.status == 'Borrowed' %}
+                  <a href="{{ url_for('borrow_return', id=borrow.id) }}" class="btn btn-sm btn-outline-success rounded-pill">
+                    <i class="fas fa-undo-alt"></i> Return
+                  </a>
+                {% else %}
+                  <button class="btn btn-sm btn-outline-secondary rounded-pill" disabled>
+                    <i class="fas fa-check-circle"></i> Returned
+                  </button>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="text-center py-5">
+        <i class="fas fa-book-reader fs-1 text-muted mb-3"></i>
+        <h5 class="mb-3">No Borrowings Found</h5>
+        <p class="text-muted mb-4">There are no borrowing records yet.</p>
+        <a href="{{ url_for('borrow_add') }}" class="btn btn-success d-inline-flex align-items-center gap-2 rounded-pill">
+          <i class="fas fa-plus"></i> Add New Borrowing
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+
+{% block title %}Return Book - Library Management System{% endblock %}
+
+{% block page_header %}Return Book{% endblock %}
+{% block page_subheader %}
+    <p class="text-muted">Record a book return</p>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Borrowing Details</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-4">Book</dt>
+                            <dd class="col-sm-8">{{ book.title }}</dd>
+                            
+                            <dt class="col-sm-4">Author</dt>
+                            <dd class="col-sm-8">{{ book.author }}</dd>
+                            
+                            <dt class="col-sm-4">ISBN</dt>
+                            <dd class="col-sm-8">{{ book.isbn }}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-4">Member</dt>
+                            <dd class="col-sm-8">{{ member.name }}</dd>
+                            
+                            <dt class="col-sm-4">Borrowed</dt>
+                            <dd class="col-sm-8">{{ borrowing.borrow_date }}</dd>
+                            
+                            <dt class="col-sm-4">Due Date</dt>
+                            <dd class="col-sm-8">{{ borrowing.due_date }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('borrow_return', id=borrowing.id) }}">
+                    {{ form.csrf_token }}
+                    {{ form.borrowing_id }}
+                    
+                    <div class="mb-3">
+                        <label for="return_date" class="form-label">Return Date <span class="text-danger">*</span></label>
+                        {{ form.return_date(class="form-control", type="date") }}
+                        {% if form.return_date.errors %}
+                            {% for error in form.return_date.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('borrow_index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Borrowings
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check-circle me-1"></i> Confirm Return
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

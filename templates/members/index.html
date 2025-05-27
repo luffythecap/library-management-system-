@@ -1,0 +1,102 @@
+{% extends 'layout.html' %}
+
+{% block title %}Members - Library Management System{% endblock %}
+
+{% block page_header %}Members{% endblock %}
+{% block page_subheader %}
+  <p class="text-muted">Manage library members and membership information</p>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+  <div class="col-md-6">
+    <form action="{{ url_for('members_index') }}" method="GET" class="row g-2">
+      <div class="col-12">
+        <div class="input-group shadow-sm">
+          <span class="input-group-text bg-dark btn btn-primary text-white border-0">
+            <i class="fas fa-search"></i>
+          </span>
+          <input type="text" name="query" class="form-control border-0 bg-dark" placeholder="Search members..." 
+                 value="{{ request.args.get('query', '') }}">
+          <button type="submit" class="btn btn-primary px-4">
+            <i class="fas fa-search me-1"></i> Search
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="col-md-6 text-md-end mt-3 mt-md-0">
+    <a href="{{ url_for('members_add') }}" class="btn btn-success rounded-4 shadow-sm px-4">
+      <i class="fas fa-user-plus me-2"></i> Add New Member
+    </a>
+  </div>
+</div>
+
+<div class="card shadow-sm border-0 rounded-4">
+  <div class="card-body">
+    {% if members %}
+    <div class="table-responsive rounded-4">
+      <table class="table table-hover align-middle text-center">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">#ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Join Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for member in members %}
+          <tr>
+            <td>{{ member.id }}</td>
+            <td class="fw-semibold">{{ member.name }}</td>
+            <td>{{ member.email }}</td>
+            <td>{{ member.phone }}</td>
+            <td>{{ member.join_date }}</td>
+            <td>
+              <span class="badge {{ 'bg-success' if member.membership_status == 'Active' else 'bg-secondary' }} px-3 py-2 rounded-pill">
+                {{ member.membership_status }}
+              </span>
+            </td>
+            <td>
+              <div class="btn-group" role="group">
+                <a href="{{ url_for('members_view', id=member.id) }}" class="btn btn-sm btn-outline-primary rounded-3">
+                  <i class="fas fa-eye mt-2"></i>
+                </a>
+                <a href="{{ url_for('members_edit', id=member.id) }}" class="btn btn-sm btn-outline-warning rounded-3">
+                  <i class="fas fa-edit mt-2"></i>
+                </a>
+                <form method="POST" action="{{ url_for('members_delete', id=member.id) }}" class="d-inline">
+                  <button type="submit" class="btn btn-sm btn-outline-danger rounded-3 delete-confirm">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+      <i class="fas fa-users fs-1 text-muted mb-3"></i>
+      <h5 class="mb-2">No Members Found</h5>
+      <p class="text-muted">There are no members matching your search criteria.</p>
+      <div class="mt-4">
+        <a href="{{ url_for('members_index') }}" class="btn btn-outline-secondary rounded-4 me-2 px-4">
+          <i class="fas fa-sync-alt me-1"></i> Clear Search
+        </a>
+        <a href="{{ url_for('members_add') }}" class="btn btn-success rounded-4 px-4">
+          <i class="fas fa-user-plus me-1"></i> Add New Member
+        </a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

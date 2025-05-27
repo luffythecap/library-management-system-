@@ -1,0 +1,192 @@
+/* Custom styles to complement Tailwind CSS */
+
+/* .book-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+} */
+.dark-input {
+  background-color: rgb(39, 35, 75);
+  color: #fff;
+  border: 2px solid #444;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.dark-input::placeholder {
+  color: #aaa;
+}
+
+.book-card {
+  background: linear-gradient(145deg, #1e1e2f, #3c3c58);
+  transition: all 0.3s ease;
+  color: #fff;
+}
+
+/* Hover effect */
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Status badge */
+.status-badge {
+  font-size: 0.75rem;
+  padding: 0.4rem 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-available {
+  background: #28a745;
+}
+
+.status-borrowed {
+  background: #dc3545;
+}
+
+/* Card footer */
+.card-footer {
+  background-color: #2b2b3c;
+  border-top: 1px solid #444;
+}
+
+.card-footer hr {
+  border-top: 1px solid #555;
+}
+
+/* Button styles */
+.btn-outline-light {
+  border: 1px solid #fff;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+  background-color: #fff;
+  color: #1e1e2f;
+}
+
+.badge.bg-light {
+  background-color: #444;
+}
+
+#searchForm {
+  border-radius: 12px; /* Rounded corners */
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the input group */
+.input-group-text {
+  background-color: #343a40;
+  color: #fff;
+  border-radius: 8px 0 0 8px;
+}
+
+.form-control {
+  border-radius: 0 8px 8px 0;
+  border: 1px solid #ccc;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(38, 143, 255, 0.5);
+}
+
+/* Styling for the select elements */
+.form-select {
+  border-radius: 8px;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  /* background-color: #fff; */
+}
+
+.form-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(38, 143, 255, 0.5);
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #2b3245;
+    color: #ffffff;
+  }
+}
+
+/* Button Styles for Book Cards */
+.btn-group .btn {
+  margin-right: 0.5rem;
+}
+
+.card-title,
+.card-text {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Rounded delete button */
+.delete-confirm {
+  /* border-radius: 50%; */
+  padding: 0.6rem;
+  font-size: 0.7rem;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.delete-confirm:hover {
+  background-color: #c82333;
+  transform: scale(1.1);
+}
+
+.delete-confirm:focus {
+  outline: none;
+}
+
+/* Adding space between buttons */
+.card-footer .btn-group .btn {
+  margin-right: 8px; /* Adjust the value as needed */
+}
+
+.card-footer .btn-group .btn:last-child {
+  margin-right: 0; /* No margin for the last button */
+}
+
+.navbar-brand {
+  font-weight: bold;
+}
+
+/* Make sure the main content has a minimum height to push the footer to the bottom */
+.min-h-content {
+  min-height: calc(100vh - 180px);
+}
+
+/* Custom badge styles */
+.badge-borrowed {
+  background-color: #f59e0b;
+  color: white;
+}
+
+.badge-available {
+  background-color: #10b981;
+  color: white;
+}
+
+.badge-overdue {
+  background-color: #ef4444;
+  color: white;
+}
+
+.badge-returned {
+  background-color: #6b7280;
+  color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dashboard-card {
+    margin-bottom: 1rem;
+  }
+}

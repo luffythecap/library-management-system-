@@ -1,0 +1,82 @@
+{% extends 'layout.html' %}
+
+{% block title %}New Borrowing - Library Management System{% endblock %}
+
+{% block page_header %}New Borrowing{% endblock %}
+{% block page_subheader %}
+    <p class="text-muted">Record a new book borrowing</p>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('borrow_add') }}">
+                    {{ form.csrf_token }}
+                    
+                    <div class="mb-3">
+                        <label for="book_id" class="form-label">Book <span class="text-danger">*</span></label>
+                        {{ form.book_id(class="form-select") }}
+                        {% if form.book_id.errors %}
+                            {% for error in form.book_id.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        {% if not form.book_id.choices %}
+                            <div class="text-danger small">No available books to borrow.</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="member_id" class="form-label">Member <span class="text-danger">*</span></label>
+                        {{ form.member_id(class="form-select") }}
+                        {% if form.member_id.errors %}
+                            {% for error in form.member_id.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        {% if not form.member_id.choices %}
+                            <div class="text-danger small">No active members found.</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="borrow_date" class="form-label">Borrow Date <span class="text-danger">*</span></label>
+                                {{ form.borrow_date(class="form-control", type="date") }}
+                                {% if form.borrow_date.errors %}
+                                    {% for error in form.borrow_date.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="due_date" class="form-label">Due Date <span class="text-danger">*</span></label>
+                                {{ form.due_date(class="form-control", type="date") }}
+                                {% if form.due_date.errors %}
+                                    {% for error in form.due_date.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('borrow_index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Borrowings
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Record Borrowing
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

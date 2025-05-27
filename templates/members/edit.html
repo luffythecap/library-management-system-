@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+
+{% block title %}Edit Member - Library Management System{% endblock %}
+
+{% block page_header %}Edit Member{% endblock %}
+{% block page_subheader %}
+    <p class="text-muted">Update member information</p>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('members_edit', id=member.id) }}">
+                    {{ form.csrf_token }}
+                    
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                        {{ form.name(class="form-control", placeholder="Enter member's full name") }}
+                        {% if form.name.errors %}
+                            {% for error in form.name.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                {{ form.email(class="form-control", placeholder="Enter email address") }}
+                                {% if form.email.errors %}
+                                    {% for error in form.email.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                {{ form.phone(class="form-control", placeholder="Enter phone number") }}
+                                {% if form.phone.errors %}
+                                    {% for error in form.phone.errors %}
+                                        <div class="text-danger small">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="membership_status" class="form-label">Membership Status</label>
+                            {{ form.membership_status(class="form-select") }}
+                            {% if form.membership_status.errors %}
+                                {% for error in form.membership_status.errors %}
+                                    <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('members_index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Members
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Update Member
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
